@@ -1,0 +1,32 @@
+﻿body {
+    margin: 0;
+    background: url('../images/Login Vaccine.svg') center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100%;
+    font-size: 14px;
+}
+.form-login {
+    height: auto;
+    background: rgba(89, 103, 110, 0.1);
+    padding: 30px;
+    margin: auto;
+    margin-top: 10%;
+    border-radius: 4px;
+    /*font-family: 'calibri';*/
+    color: white;
+    box-shadow: 7px 13px 37px #000;
+    
+}
+
+    /*.form-login h4 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .form-register label {
+        font-family: 'calibri';
+        font-weight: 400;
+        font-size: 18px;
+    }*/

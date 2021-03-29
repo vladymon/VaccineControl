@@ -1,0 +1,32 @@
+﻿@model VC.Web.Models.EditUserViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2 class="text-center title">Editar usuario</h2>
+
+<div class="text-center">
+    <img src="@Model.ImageFullPath" style="width:100px;height:100px;border-radius:50%" />
+</div>
+<div class="row">
+    <div class="col-md-offset-3 col-md-6">
+        <form asp-action="ChangeUser" enctype="multipart/form-data" class="form-register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageId" />
+
+            <partial name="_ChangeUser" />
+
+            <div class="form-group">
+                <input type="submit" value="Grabar" class="btn btn-block btn-vaccine" />
+                <a asp-action="ChangePassword" class="btn btn-block btn-vaccine">Cambiar Contraseña</a>
+                @*<a asp-controller="Home" asp-action="Index" class="btn btn-success">Regresar</a>*@
+                <a asp-controller="Home" asp-action="Index" class="btn btn-block btn-vaccine">Regresar</a>
+            </div>
+        </form>
+    </div>    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

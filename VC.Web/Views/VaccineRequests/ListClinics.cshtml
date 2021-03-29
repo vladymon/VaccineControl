@@ -1,0 +1,158 @@
+﻿@model VC.Web.Models.ListClinicViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<h2 class="text-center title">Lista de Clíncias</h2>
+
+<form asp-action="ListClinics" enctype="multipart/form-data" class="form-register">
+    <div class="row">
+        <div class="col-md-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="ProvinceId" class="control-label"></label>
+                <select asp-for="ProvinceId" asp-items="Model.Provinces" class="form-control"></select>
+                <span asp-validation-for="ProvinceId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="DistrictId" class="control-label"></label>
+                <select asp-for="DistrictId" asp-items="Model.Districts" class="form-control"></select>
+                <span asp-validation-for="DistrictId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="control-label"></label>
+                <input type="submit" value="Buscar" class="btn btn-block btn-primary text-margin-top-9" />
+            </div>
+        </div>
+    </div>
+</form>
+    
+<br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            @*<div class="panel-heading">
+                    <h3 class="panel-title">Paises</h3>
+                </div>*@
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                Clínica
+                            </th>
+                            <th>
+                                Dirección
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Clinics != null)
+                        {
+                            @foreach (var item in Model.Clinics)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Address)
+                                    </td>
+                                    <td>
+                                        <a asp-action="ListCalendar" asp-route-clinicId="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-check"></i></a>
+                                        @*<a asp-action="ListCalendar" asp-route-id="@item.Id" class="btn btn-success"><i class="glyphicon glyphicon-check"></i></a>*@
+                                        @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-align-justify"></i></a>
+        <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>*@
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/js/deleteDialog.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable();
+
+            // Delete item
+            sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Countries/Delete/', false);
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#DepartmentId").change(function () {
+                $("#ProvinceId").empty();
+                $("#ProvinceId").append('<option value="0">[Seleccionar...]</option>');
+                $("#DistrictId").empty();
+                $("#DistrictId").append('<option value="0">[Seleccionar...]</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetProvinces")',
+                    dataType: 'json',
+                    data: { departmentId: $("#DepartmentId").val() },
+                    success: function (provinces) {
+                        $.each(provinces, function (i, province) {
+                            debugger;
+                            $("#ProvinceId").append('<option value="'
+                                + province.id + '">'
+                                + province.name + '</option>');
+                        });
+                    },
+                    //error: function (ex) {
+                    //    alert('No hay provincias.' + ex);
+                    //}
+                });
+                return false;
+            })
+            $("#ProvinceId").change(function () {
+                $("#DistrictId").empty();
+                $("#MyTable").empty();
+                $("#DistrictId").append('<option value="0">[Seleccionar...]</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDistricts")',
+                    dataType: 'json',
+                    data: { provinceId: $("#ProvinceId").val() },
+                    success: function (districts) {
+                        $.each(districts, function (i, district) {
+                            debugger;
+                            $("#DistrictId").append('<option value="'
+                                + district.id + '">'
+                                + district.name + '</option>');
+                        });
+                    },
+                    //error: function (ex) {
+                    //    alert('No hay distritos.' + ex);
+                    //}
+                });
+                return false;
+            })
+        });
+    </script>
+
+}

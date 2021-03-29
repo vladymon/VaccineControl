@@ -1,0 +1,36 @@
+﻿@model VC.Common.Entities.VaccineRequestDetail
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2 class="text-center title">Se ha registrado la atención</h2>
+
+<a asp-action="ChangeVaccineRequest" asp-route-id=@ViewData["document"] class="btn btn-success">Regresar</a>
+
+<!--<div>-->
+    @*<h4>VaccineRequest</h4>*@
+    <!--<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Fecha
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Calendar.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Clinic.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clinic.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Clinic.Address)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clinic.Address)
+        </dd>
+    </dl>
+</div>-->

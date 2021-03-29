@@ -1,0 +1,111 @@
+﻿@model VC.Web.Models.AddClinicViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register</h2>
+
+<h4>Clinica</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Register" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AttentionPerDay" class="control-label"></label>
+                <input asp-for="AttentionPerDay" class="form-control" />
+                <span asp-validation-for="AttentionPerDay" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label"></label>
+                <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control"></select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProvinceId" class="control-label"></label>
+                <select asp-for="ProvinceId" asp-items="Model.Provinces" class="form-control"></select>
+                <span asp-validation-for="ProvinceId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DistrictId" class="control-label"></label>
+                <select asp-for="DistrictId" asp-items="Model.Districts" class="form-control"></select>
+                <span asp-validation-for="DistrictId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#DepartmentId").change(function () {
+                $("#ProvinceId").empty();
+                $("#ProvinceId").append('<option value="0">[Seleccionar...]</option>');
+                $("#DistrictId").empty();
+                $("#DistrictId").append('<option value="0">[Seleccionar...]</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetProvinces")',
+                    dataType: 'json',
+                    data: { departmentId: $("#DepartmentId").val() },
+                    success: function (provinces) {
+                        $.each(provinces, function (i, province) {
+                            debugger;
+                            $("#ProvinceId").append('<option value="'
+                                + province.id + '">'
+                                + province.name + '</option>');
+                        });
+                    },
+                    //error: function (ex) {
+                    //    alert('No hay provincias.' + ex);
+                    //}
+                });
+                return false;
+            })
+            $("#ProvinceId").change(function () {
+                $("#DistrictId").empty();
+                $("#DistrictId").append('<option value="0">[Seleccionar...]</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDistricts")',
+                    dataType: 'json',
+                    data: { provinceId: $("#ProvinceId").val() },
+                    success: function (districts) {
+                        $.each(districts, function (i, district) {
+                            debugger;
+                            $("#DistrictId").append('<option value="'
+                                + district.id + '">'
+                                + district.name + '</option>');
+                        });
+                    },
+                    //error: function (ex) {
+                    //    alert('No hay distritos.' + ex);
+                    //}
+                });
+                return false;
+            })
+        });
+</script>
+}

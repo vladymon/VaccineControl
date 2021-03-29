@@ -1,0 +1,72 @@
+﻿@model IEnumerable<VC.Common.Entities.Calendar>
+@{
+    ViewData["Title"] = "Agenda";
+}
+<div class="page-header-gray">
+    <div class="page-title">
+        <span><i class="glyphicon glyphicon-calendar"></i> Calendario</span>
+    </div>
+</div>
+
+<div class="module-schedule">
+    <input type="hidden" asp-for=@ViewData["ClinicId"] />
+    <div>
+        <div class="calendar-month-title">
+            @ViewData["MonthName"] - @ViewData["Year"]
+        </div>
+    </div>
+    <div class="items-days">
+        <div class="block-weeks block-display-small">
+            <span>Dom</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Lun</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Mar</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Mie</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Jue</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Vie</span>
+        </div>
+        <div class="block-weeks block-display-small">
+            <span>Sab</span>
+        </div>
+    </div>
+    <div class="items-days">
+        @foreach (var item in Model)
+        {
+            @if (item.Day == 0)
+            {
+                <div class="block-days"></div>
+            }
+            else
+            {
+                <div class="block-days">
+                    <div class="schedule-day-text">@item.Day</div>
+                    @if (item.IsAviable == true)
+                    {
+                        <div class="schedule-type-sale-text block-display-small">
+                            <a asp-action="AddVaccineRequest" asp-route-year="@item.Year" asp-route-month="@item.Month" asp-route-day="@item.Day" asp-route-clinicId=@ViewData["ClinicId"]  class="btn btn-block btn-info">
+                                Seleccionar
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="schedule-type-sale-text block-display-small">
+                            <a asp-area="" class="btn btn-block btn-default not-active">
+                                Seleccionar
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>

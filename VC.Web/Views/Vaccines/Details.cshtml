@@ -1,0 +1,29 @@
+﻿@model VC.Common.Entities.Vaccine
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalles de la vacuna</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DosesNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DosesNumber)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-success">Regresar</a>
+</div>

@@ -1,0 +1,132 @@
+﻿@model VC.Web.Models.FindUserViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<h2 class="text-center title">Paciente</h2>
+<div class="row">
+    <div class="col-md-offset-4 col-md-4">
+        <form asp-action="ChangeVaccineRequest" enctype="multipart/form-data" class="form-register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Document" class="control-label">Documento</label>
+                <input asp-for="Document" class="form-control" />
+                <span asp-validation-for="Document" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+<br />
+@if (Model != null)
+{
+    if (Model.User != null)
+    {
+        <div>
+            <h4 class="text-warning">Datos del paciente</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.FullName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.FullName)
+                </dd>
+                <dt>
+                    Documento
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.Document)
+                </dd>
+            </dl>
+        </div>
+        @if (Model.FindUserDetailViewModels != null)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        @*<div class="panel-heading">
+                                <h3 class="panel-title">Paises</h3>
+                            </div>*@
+                        <div class="panel-body">
+                            <table class="table table-hover table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Clínica
+                                        </th>
+                                        <th>
+                                            Dirección
+                                        </th>
+                                        <th>
+                                            Fecha
+                                        </th>
+                                        <th>
+                                            Estado
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.FindUserDetailViewModels)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Clinic)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Address)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CalendarId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status)
+                                            </td>
+                                            @if (item.StatusId == 1)
+                                            {
+                                                <td>
+                                                    <a asp-action="ChangeStatus" asp-route-id="@item.DetailId" asp-route-document="@Model.User.Document" class="btn btn-default not-active"><i class="glyphicon glyphicon-check"></i></a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <a asp-action="ChangeStatus" asp-route-id="@item.DetailId" asp-route-document="@Model.User.Document" class="btn btn-success"><i class="glyphicon glyphicon-check"></i></a>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <h4 class="text-celeste">El usuario no ha registrado una fecha de vacunación</h4>
+            </div>
+        }
+    }
+}
+else
+{
+    <div>
+        <h3>El usuario no se encuentra registrado</h3>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
